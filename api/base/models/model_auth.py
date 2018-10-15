@@ -3,22 +3,25 @@ from django.conf import settings
 
 class User(models.Model):
 
-    #CHOICES
+    # CHOICES
     PREMIUM_TYPE_CHOICES = (
         ('WE', 'Weekly'),
         ('MO', 'Monthly'),
         ('AN', 'Annualy'),
     )
 
-    #DATABASE FIELDS
-    user_id = models.AutoField('id', primary_key=True) # unique auto increment key
-    email = models.EmailField(max_length=254)
+    # DATABASE FIELDS
+    # unique auto increment key
+    user_id = models.AutoField('id', primary_key=True)
+    user_name = models.CharField(max_length=254)
+    email = models.EmailField(max_length=254,)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     last_login_date = models.DateTimeField()
     client_id = models.CharField(max_length=100)
     is_premium = models.BooleanField()
-    premium_type = models.CharField(max_lenght=2, choices=PREMIUM_TYPE_CHOICES)
+    premium_type = models.CharField(max_length=2, choices=PREMIUM_TYPE_CHOICES)
+    is_active = models.BooleanField()
 
     # MANAGERS
     objects = models.Manager()
@@ -29,25 +32,24 @@ class User(models.Model):
         verbose_name = 'user'
         verbose_name_plural = 'users'
 
-    #MODEL METHODS
+    # MODEL METHODS
     def __str__(self):
-        return self.name
-
+        return self.user_id
 
     def save(self, *args, **kwargs):
         if settings.DEBUG:
-            #TODO make a print call
+            # TODO make a print call
             super().save(*args, **kwargs)  # Call the "real" save() method.
-            #TODO make a print call
-            
+            # TODO make a print call
+
         else:
             super().save(*args, **kwargs)  # Call the "real" save() method.
 
-    def delete(self,*args,**kwargs):
+    def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)  # Call the "real" delete() method.
 
+    # OTHER METHODS
 
-    #OTHER METHODS
     def premium_status(self):
         """ Returns the user's premium status. """
         if self.is_premium:

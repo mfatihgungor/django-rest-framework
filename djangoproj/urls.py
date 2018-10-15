@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 import debug_toolbar
 
-from v1 import urls as v1urls
-
+from api.base import urls as baseUrls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1', include(v1urls)),
+    path('api/base/', include(baseUrls)),
     path('__debug__/', include(debug_toolbar.urls)),
 ]
 

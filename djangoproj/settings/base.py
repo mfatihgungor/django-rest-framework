@@ -18,8 +18,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
-    'v1.user',
-    'v1.word',
+    'api.base',
+
 ]
 
 MIDDLEWARE = [
@@ -32,9 +32,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'engwordbackend.urls'
+ROOT_URLCONF = 'djangoproj.urls'
 
-WSGI_APPLICATION = 'engwordbackend.wsgi.application'
+WSGI_APPLICATION = 'djangoproj.wsgi.application'
 
 TEMPLATES = [
     {
@@ -52,15 +52,17 @@ TEMPLATES = [
     },
 ]
 
+
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'api.utils.custom_password_validator.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -69,6 +71,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'base.CustomUser'
+
+AUTHENTICATION_BACKENDS = (
+    'api.utils.custom_model_backend.CustomModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 
 # Internationalization
@@ -103,17 +112,24 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', 
-        #'rest_framework.permissions.AllowAny'
-        #'rest_framework.permissions.IsAdminUser'
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-        #'rest_framework.permissions.DjangoModelPermission'
-        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-        #'rest_framework.permissions.DjangoObjectPermissions'
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny'
+        # 'rest_framework.permissions.IsAdminUser'
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+        # 'rest_framework.permissions.DjangoModelPermission'
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.DjangoObjectPermissions'
 
-        
-    )
+
+    ),
+    # 'EXCEPTION_HANDLER': 'api.utils.custom_exception_handler.CustomExceptionHandler',
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
+    # 'DEFAULT_METADATA_CLASS': 'api.utils.custom_meta_data.CustomMetaData',
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
 
 # drf-yasg
 SWAGGER_SETTINGS = {
@@ -137,4 +153,3 @@ SWAGGER_SETTINGS = {
 REDOC_SETTINGS = {
     'SPEC_URL': ('schema-json', {'format': '.json'}),
 }
-

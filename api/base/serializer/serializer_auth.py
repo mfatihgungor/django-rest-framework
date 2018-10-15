@@ -1,6 +1,6 @@
 from rest_framework import serializers
 #TODO: fix the path 
-from ..models.userModel import User
+from api.base.models.model_auth import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
